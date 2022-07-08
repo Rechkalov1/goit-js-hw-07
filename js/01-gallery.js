@@ -26,15 +26,14 @@ function createImageGallery(itemList) {
 
 function galleryModalOpenClose(event) {
   event.preventDefault();
-  const imageClickEl = event.target.classList.contains("gallery_image");
+
+  const imageClickEl = event.target.classList.contains("gallery__image");
   if (!imageClickEl) {
     return;
   }
-
   const instance = basicLightbox.create(`
-    <img src='${event.target.dataset.source}'
-    />`);
-
+      <img src='${event.target.dataset.source}'
+      />`);
   instance.show();
 
   const CloseByEscape = function (event) {
