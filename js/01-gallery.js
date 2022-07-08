@@ -1,28 +1,47 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
-console.log(galleryItems);
-// export const galleryItems = [
-//   {
-//     preview:
-//       'https://cdn.pixabay.com/photo/2019/05/14/16/43/himilayan-blue-poppy-4202825__340.jpg',
-//     original:
-//       'https://cdn.pixabay.com/photo/2019/05/14/16/43/himilayan-blue-poppy-4202825_1280.jpg',
-//     description: 'Hokkaido Flower',
-//   },
-const listGallery = document.querySelector(".gallery");
 
-function createImageGallery(galleryItems) {
-  return galleryItems.map(({ preview, original, description }) => {
-    `<div class="gallery__item">
-      <a class="gallery__link" href="${original}">
-        <img
-          class="gallery__image"
-          src="${preview}"
-          data-source="${original}"
-          alt="${description}"
-        />
-      </a>
-    </div>;`;
-    console.log(galleryItems);
-  });
+const listGallery = document.querySelector(".gallery");
+const createImg = createImageGallery(galleryItems);
+
+listGallery.insertAdjacentHTML("beforeend", createImg);
+
+listGallery.addEventListener("click", galleryModalOpenClose);
+
+function createImageGallery(itemList) {
+  return itemList
+    .map(({ preview, original, description }) => {
+      return `<a class="gallery__link" href="${original}">
+          <img
+          
+            class="gallery__image"
+           src="${preview}"
+             data-source="${original}"
+            alt="${description}"
+          />
+         </a>`;
+    })
+    .join("");
+}
+
+function galleryModalOpenClose(event) {
+  event.preventDefault();
+  const imageClickEl = event.target.classList.contains("gallery_image");
+  if (!imageClickEl) {
+    return;
+  }
+
+  const instance = basicLightbox.create(`
+    <img src='${event.target.dataset.source}'
+    />`);
+
+  instance.show();
+
+  const CloseByEscape = function (event) {
+    if (event.code === "Escape") {
+      instance.close();
+      document.removeEventListener("keydown", CloseByEscape);
+    }
+  };
+  document.addEventListener("keydown", CloseByEscape);
 }
